@@ -1,30 +1,36 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+import 'package:budget_app/main.dart';
+import 'package:budget_app/widgets/transactions/transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:budget_app/main.dart';
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('app shows the transaction list', (tester) async {
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('Transactions'), findsOneWidget);
+    expect(find.text('Freelance'), findsOneWidget);
+    expect(find.text('Payment from Adril Shik'), findsOneWidget);
+    expect(find.text(r'+$85.99'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('transaction card formats an expense', (tester) async {
+    const expense = TransactionData(
+      category: 'Food',
+      description: 'Lunch',
+      amount: -12.5,
+      timeAgo: 'Today',
+      icon: Icons.restaurant_outlined,
+      accentColor: Colors.orange,
+    );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(body: TransactionCard(transaction: expense)),
+      ),
+    );
+
+    expect(find.text(r'-$12.50'), findsOneWidget);
+    expect(find.text('Lunch'), findsOneWidget);
+    expect(find.text('Today'), findsOneWidget);
   });
 }
