@@ -13,4 +13,5 @@ class AppColors {
 
   // Border
   static const Color border = Color(0xFFE5E0CE);
+  static const Color error = Color.fromARGB(255, 248, 114, 114);
 }

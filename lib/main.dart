@@ -1,4 +1,5 @@
 import 'package:budget_app/screens/welcome/welcome.dart';
+import 'package:budget_app/shared/utils/toaster.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Budget App",
       theme: _buildTheme(Brightness.light),
+      builder: Toaster.builder,
 
       home: WelcomePage(),
     );

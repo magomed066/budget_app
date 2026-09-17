@@ -1,8 +1,11 @@
+import 'package:budget_app/services/auth/auth_service.dart';
+import 'package:budget_app/services/base/api_exception.dart';
 import 'package:budget_app/shared/theme/colors.dart';
 import 'package:budget_app/shared/utils/logger.dart';
 import 'package:budget_app/widgets/app_bar/app_bar.dart';
 import 'package:budget_app/widgets/login_form/login_form.dart';
 import 'package:flutter/material.dart';
+import 'package:budget_app/shared/utils/toaster.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,7 +18,30 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void onSubmit() {}
+  Future<void> onSubmit() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text;
+
+    try {
+      final response = await authService.login(email, password);
+
+      logger.d(response.data.toJson());
+    } on ApiException catch (error) {
+      logger.e('Login failed: ${error.message}');
+
+      Toaster.error(error.userMessage);
+    } catch (error) {
+      logger.e('Unexpected error: $error');
+      Toaster.error('Unable to sign in. Please try again.');
+    }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
