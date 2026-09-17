@@ -1,3 +1,4 @@
+import 'package:budget_app/shared/components/button_indicator.dart';
 import 'package:budget_app/shared/components/text_field.dart';
 import 'package:budget_app/shared/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +9,13 @@ class LoginForm extends StatelessWidget {
     required this.emailController,
     required this.passwordController,
     required this.onSignIn,
+    this.isLoading = false,
   });
 
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final VoidCallback? onSignIn;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +53,7 @@ class LoginForm extends StatelessWidget {
             SizedBox(
               height: 50,
               child: FilledButton(
-                onPressed: onSignIn,
+                onPressed: isLoading ? () {} : onSignIn,
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.backgroundBlack,
                   disabledBackgroundColor: AppColors.border,
@@ -59,10 +62,15 @@ class LoginForm extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: const Text(
-                  'Sign In',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
+                child: isLoading
+                    ? ButtonIndicator()
+                    : const Text(
+                        'Sign In',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
             ),
           ],

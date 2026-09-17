@@ -18,9 +18,13 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  bool isLoading = false;
+
   Future<void> onSubmit() async {
     final email = emailController.text.trim();
     final password = passwordController.text;
+
+    setState(() => isLoading = true);
 
     try {
       final response = await authService.login(email, password);
@@ -33,6 +37,8 @@ class _LoginPageState extends State<LoginPage> {
     } catch (error) {
       logger.e('Unexpected error: $error');
       Toaster.error('Unable to sign in. Please try again.');
+    } finally {
+      setState(() => isLoading = false);
     }
   }
 
@@ -83,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                     emailController: emailController,
                     passwordController: passwordController,
                     onSignIn: onSubmit,
+                    isLoading: isLoading,
                   ),
                   const SizedBox(height: 14),
                   Wrap(
