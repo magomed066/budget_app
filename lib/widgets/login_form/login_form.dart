@@ -3,8 +3,15 @@ import 'package:budget_app/shared/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class LoginForm extends StatelessWidget {
-  const LoginForm({super.key, this.onSignIn});
+  const LoginForm({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+    required this.onSignIn,
+  });
 
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
   final VoidCallback? onSignIn;
 
   @override
@@ -19,7 +26,8 @@ class LoginForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const AppTextField(
+            AppTextField(
+              controller: emailController,
               label: 'Email Address',
               hintText: 'name@example.com',
               keyboardType: TextInputType.emailAddress,
@@ -29,6 +37,7 @@ class LoginForm extends StatelessWidget {
             ),
             const SizedBox(height: 22),
             AppTextField(
+              controller: passwordController,
               label: 'Password',
               hintText: 'Enter your password',
               obscureText: true,
@@ -36,7 +45,6 @@ class LoginForm extends StatelessWidget {
               enableSuggestions: false,
               textInputAction: TextInputAction.done,
               autofillHints: const [AutofillHints.password],
-              onSubmitted: (_) => onSignIn?.call(),
             ),
             const SizedBox(height: 22),
             SizedBox(

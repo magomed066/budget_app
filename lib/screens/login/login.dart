@@ -1,13 +1,21 @@
 import 'package:budget_app/shared/theme/colors.dart';
+import 'package:budget_app/shared/utils/logger.dart';
 import 'package:budget_app/widgets/app_bar/app_bar.dart';
 import 'package:budget_app/widgets/login_form/login_form.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key, this.onSignIn, this.onCreateAccount});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
-  final VoidCallback? onSignIn;
-  final VoidCallback? onCreateAccount;
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  void onSubmit() {}
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +53,11 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 36),
-                  LoginForm(onSignIn: () {}),
+                  LoginForm(
+                    emailController: emailController,
+                    passwordController: passwordController,
+                    onSignIn: onSubmit,
+                  ),
                   const SizedBox(height: 14),
                   Wrap(
                     alignment: WrapAlignment.center,
@@ -59,7 +71,7 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: onCreateAccount,
+                        onPressed: () {},
                         style: TextButton.styleFrom(
                           foregroundColor: const Color(0xFFC78571),
                           disabledForegroundColor: const Color(0xFFC78571),
