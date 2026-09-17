@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:budget_app/services/base/api_exception.dart';
-import 'package:budget_app/services/base/helpers.dart';
-import 'package:budget_app/shared/utils/toaster.dart';
+import 'package:budget_app/core/network/api_exception.dart';
+import 'package:budget_app/core/network/helpers.dart';
+import 'package:budget_app/shared/widgets/toaster.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -79,6 +79,7 @@ void main() {
     final bounds = tester.getRect(find.text('Visible above keyboard'));
     expect(bounds.top, greaterThanOrEqualTo(0));
     expect(bounds.bottom, lessThan(700));
+    await tester.pump(const Duration(seconds: 4));
     expect(tester.takeException(), isNull);
   });
 }
