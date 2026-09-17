@@ -1,4 +1,4 @@
-import 'package:budget_app/screens/app_shell.dart';
+import 'package:budget_app/screens/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 
 import 'theme/app_theme.dart';
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Budget App",
       theme: AppTheme.light,
-      home: AppShell(),
+      home: WelcomePage(),
     );
   }
 }
