@@ -1,3 +1,4 @@
+import 'package:budget_app/screens/login/login.dart';
 import 'package:budget_app/shared/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -35,19 +36,30 @@ class WelcomePage extends StatelessWidget {
                 width: double.infinity,
                 height: 50,
                 child: FilledButton(
-                  onPressed: () {},
+                  onPressed: () => navigateToLogin(context),
                   style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.backgroundSecondary,
+                    backgroundColor: AppColors.backgroundBlack,
                   ),
                   child: Text(
                     "Get started",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void navigateToLogin(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return LoginPage();
+        },
       ),
     );
   }

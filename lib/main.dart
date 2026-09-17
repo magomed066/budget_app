@@ -1,7 +1,6 @@
 import 'package:budget_app/screens/welcome/welcome.dart';
 import 'package:flutter/material.dart';
-
-import 'theme/app_theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,8 +14,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Budget App",
-      theme: AppTheme.light,
+      theme: _buildTheme(Brightness.light),
+
       home: WelcomePage(),
     );
   }
+}
+
+ThemeData _buildTheme(Brightness brightness) {
+  final baseTheme = ThemeData(brightness: brightness);
+
+  return baseTheme.copyWith(
+    textTheme: GoogleFonts.interTextTheme(baseTheme.textTheme),
+  );
 }
