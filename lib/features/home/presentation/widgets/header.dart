@@ -24,7 +24,7 @@ class HeaderWidget extends ConsumerWidget {
               Text(
                 getUserName(ref),
                 style: TextStyle(
-                  color: const Color.fromARGB(255, 0, 196, 176),
+                  color: AppColors.backgroundSecondary,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -36,7 +36,7 @@ class HeaderWidget extends ConsumerWidget {
             children: [
               Text(
                 "Ready to track your money..!",
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: AppColors.secondaryText),
               ),
             ],
           ),

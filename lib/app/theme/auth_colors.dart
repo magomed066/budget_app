@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AuthColors {
   // Background
   static const Color background = Color(0xfffef9e6);
-  static const Color backgroundSecondary = Color(0xffeb8460);
+  static const Color backgroundSecondary = Color(0xFFE77C64);
   static const Color backgroundBlack = Color(0xff060f28);
   static const Color backgroundAccent = Color(0xFFF2C3B3);
 

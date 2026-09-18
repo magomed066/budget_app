@@ -11,109 +11,67 @@ class AppNavigationBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onDestinationSelected;
 
-  static const destinations = <_NavigationDestination>[
-    _NavigationDestination(label: "Home", icon: Icons.home_rounded),
-    _NavigationDestination(
-      label: "Budget",
-      icon: Icons.pie_chart_outline_rounded,
-    ),
-    _NavigationDestination(label: "Savings", icon: Icons.savings_outlined),
-    _NavigationDestination(
-      label: "Profile",
-      icon: Icons.person_outline_rounded,
-    ),
+  static const _destinations = [
+    (icon: Icons.home_outlined, label: 'Home'),
+    (icon: Icons.shopping_bag_outlined, label: 'Budget'),
+    (icon: Icons.autorenew_rounded, label: 'Subscriptions'),
+    (icon: Icons.show_chart_rounded, label: 'Savings'),
+    (icon: Icons.settings_outlined, label: 'Profile'),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        border: Border(top: BorderSide(color: AppColors.divider)),
-      ),
-      child: SafeArea(
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+      child: Material(
+        color: AppColors.primaryText,
+        borderRadius: BorderRadius.circular(28),
+        clipBehavior: Clip.antiAlias,
         child: SizedBox(
-          height: 72,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(children: renderDestinations()),
-          ),
-        ),
-      ),
-    );
-  }
+          height: 70,
+          child: Row(
+            children: List.generate(_destinations.length, (index) {
+              final destination = _destinations[index];
+              final isSelected = currentIndex == index;
 
-  List<Widget> renderDestinations() {
-    return List.generate(destinations.length, (index) {
-      return Expanded(
-        child: _NavigationItem(
-          destination: destinations[index],
-          isSelected: currentIndex == index,
-          onTap: () => onDestinationSelected(index),
-        ),
-      );
-    });
-  }
-}
-
-class _NavigationItem extends StatelessWidget {
-  const _NavigationItem({
-    required this.destination,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final _NavigationDestination destination;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = isSelected ? AppColors.primary : AppColors.dark;
-
-    return Semantics(
-      selected: isSelected,
-      button: true,
-      label: destination.label,
-      child: InkWell(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? AppColors.primary.withValues(alpha: 0.08)
-                : Colors.transparent,
-            border: Border(
-              top: BorderSide(
-                color: isSelected ? AppColors.primary : Colors.transparent,
-                width: 1.5,
-              ),
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(destination.icon, color: color, size: 27),
-              const SizedBox(height: 4),
-              Text(
-                destination.label,
-                style: TextStyle(
-                  color: AppColors.dark,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
+              return Expanded(
+                child: Semantics(
+                  selected: isSelected,
+                  button: true,
+                  label: destination.label,
+                  child: Tooltip(
+                    message: destination.label,
+                    excludeFromSemantics: true,
+                    child: InkWell(
+                      onTap: () => onDestinationSelected(index),
+                      child: Center(
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeInOut,
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isSelected
+                                ? AppColors.backgroundSecondary
+                                : Colors.transparent,
+                          ),
+                          child: Icon(
+                            destination.icon,
+                            size: 24,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              );
+            }),
           ),
         ),
       ),
     );
   }
-}
-
-class _NavigationDestination {
-  const _NavigationDestination({required this.label, required this.icon});
-
-  final String label;
-  final IconData icon;
 }

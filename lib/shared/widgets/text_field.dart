@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class AppTextField extends StatelessWidget {
   const AppTextField({
     super.key,
-    required this.label,
+    this.label,
     required this.hintText,
     this.controller,
     this.focusNode,
@@ -18,7 +18,7 @@ class AppTextField extends StatelessWidget {
     this.onSubmitted,
   });
 
-  final String label;
+  final String? label;
   final String hintText;
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -36,15 +36,17 @@ class AppTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: AuthColors.primaryText,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
+        if (label?.isNotEmpty ?? false) ...[
+          Text(
+            label!,
+            style: const TextStyle(
+              color: AuthColors.primaryText,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        const SizedBox(height: 10),
+          const SizedBox(height: 10),
+        ],
         TextField(
           controller: controller,
           focusNode: focusNode,
