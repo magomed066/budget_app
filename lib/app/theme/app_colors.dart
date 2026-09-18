@@ -7,7 +7,7 @@ abstract final class AppColors {
 
   // Backgrounds
   static const Color background = Color(0xfffef9e6);
-  static const Color backgroundSecondary = Color(0xffeb8460);
+  static const Color backgroundSecondary = Color.fromARGB(255, 241, 127, 85);
   static const Color card = Colors.white;
   static const Color lightGrey = Color(0xFFF1F1F1);
   static const Color backgroundTiatry = Color(0xFFE77C64);

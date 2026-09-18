@@ -36,6 +36,21 @@ class AuthUser {
   }
 
   factory AuthUser.fromJson(Map<String, dynamic> json) {
+    for (final field in [
+      'email',
+      'firstName',
+      'lastName',
+      'createdAt',
+      'updatedAt',
+      'accessToken',
+      'refreshToken',
+    ]) {
+      if (json[field] is! String) {
+        throw FormatException(
+          'AuthUser.$field must be a string (missing, null, or wrong type).',
+        );
+      }
+    }
     return AuthUser(
       id: json['id'] as int,
       email: json['email'] as String,

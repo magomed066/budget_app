@@ -59,9 +59,7 @@ class AppNavigationBar extends StatelessWidget {
                           child: Icon(
                             destination.icon,
                             size: 24,
-                            color: isSelected
-                                ? Colors.white
-                                : AppColors.backgroundSecondary,
+                            color: AppColors.white,
                           ),
                         ),
                       ),

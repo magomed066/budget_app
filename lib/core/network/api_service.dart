@@ -11,9 +11,12 @@ class ApiService {
   late final http.Client _client;
   late final bool _ownsClient;
 
+  final Future<String?> Function()? getAccessToken;
+
   ApiService({
     required this._baseUrl,
     this._timeout = const Duration(seconds: 30),
+    this.getAccessToken,
     http.Client? client,
   }) {
     if (client == null) {
@@ -43,7 +46,7 @@ class ApiService {
     final url = Uri.parse("$_baseUrl$endpoint");
 
     return _request(
-      () => _client.get(url, headers: apiServiceHelpers.getHeaders(headers)),
+      () async => _client.get(url, headers: await _getHeaders(headers)),
     );
   }
 
@@ -55,9 +58,9 @@ class ApiService {
     final url = Uri.parse("$_baseUrl$endpoint");
 
     return _request(
-      () => _client.post(
+      () async => _client.post(
         url,
-        headers: apiServiceHelpers.getHeaders(headers),
+        headers: await _getHeaders(headers),
         body: apiServiceHelpers.encodeBody(body),
       ),
     );
@@ -71,9 +74,9 @@ class ApiService {
     final url = Uri.parse("$_baseUrl$endpoint");
 
     return _request(
-      () => _client.delete(
+      () async => _client.delete(
         url,
-        headers: apiServiceHelpers.getHeaders(headers),
+        headers: await _getHeaders(headers),
         body: apiServiceHelpers.encodeBody(body),
       ),
     );
@@ -87,9 +90,9 @@ class ApiService {
     final url = Uri.parse("$_baseUrl$endpoint");
 
     return _request(
-      () => _client.patch(
+      () async => _client.patch(
         url,
-        headers: apiServiceHelpers.getHeaders(headers),
+        headers: await _getHeaders(headers),
         body: apiServiceHelpers.encodeBody(body),
       ),
     );
@@ -103,12 +106,21 @@ class ApiService {
     final url = Uri.parse("$_baseUrl$endpoint");
 
     return _request(
-      () => _client.put(
+      () async => _client.put(
         url,
-        headers: apiServiceHelpers.getHeaders(headers),
+        headers: await _getHeaders(headers),
         body: apiServiceHelpers.encodeBody(body),
       ),
     );
+  }
+
+  Future<Map<String, String>> _getHeaders(Map<String, String>? headers) async {
+    final token = await getAccessToken?.call();
+
+    return apiServiceHelpers.getHeaders({
+      if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
+      ...?headers,
+    });
   }
 
   void close() {
