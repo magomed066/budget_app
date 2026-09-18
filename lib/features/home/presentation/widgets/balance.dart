@@ -1,4 +1,4 @@
-import 'package:budget_app/widgets/home/balance_card.dart';
+import 'package:budget_app/features/home/presentation/widgets/balance_card.dart';
 import 'package:flutter/material.dart';
 
 class BalanceWidget extends StatelessWidget {

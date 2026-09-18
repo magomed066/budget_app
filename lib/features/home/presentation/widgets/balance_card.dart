@@ -1,4 +1,4 @@
-import 'package:budget_app/theme/app_colors.dart';
+import 'package:budget_app/app/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class BalanceCardWidget extends StatefulWidget {

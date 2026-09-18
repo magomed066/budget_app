@@ -1,11 +1,13 @@
-import 'package:budget_app/theme/app_colors.dart';
+import 'package:budget_app/app/theme/app_colors.dart';
+import 'package:budget_app/features/auth/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HeaderWidget extends StatelessWidget {
+class HeaderWidget extends ConsumerWidget {
   const HeaderWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Column(
         children: [
@@ -20,7 +22,7 @@ class HeaderWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                "Jordan",
+                getUserName(ref),
                 style: TextStyle(
                   color: const Color.fromARGB(255, 0, 196, 176),
                   fontSize: 20,
@@ -41,5 +43,21 @@ class HeaderWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String getUserName(WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
+
+    final String name;
+
+    if (user.isLoading) {
+      name = '...';
+    } else if (user.hasError) {
+      name = 'Unable to load name';
+    } else {
+      name = user.value?.firstName ?? 'Guest';
+    }
+
+    return name;
   }
 }

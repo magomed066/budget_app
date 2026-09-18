@@ -1,6 +1,6 @@
-import 'package:budget_app/screens/home/home.dart';
-import 'package:budget_app/theme/app_colors.dart';
-import 'package:budget_app/widgets/navigation/app_navigation_bar.dart';
+import 'package:budget_app/features/home/presentation/home_screen.dart';
+import 'package:budget_app/app/theme/app_colors.dart';
+import 'package:budget_app/app/widgets/app_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class AppShell extends StatefulWidget {
@@ -27,7 +27,10 @@ class _AppShellState extends State<AppShell> {
               icon: Icons.pie_chart_outline_rounded,
             ),
             _ComingSoonPage(title: 'Savings', icon: Icons.savings_outlined),
-            _ComingSoonPage(title: 'Profile', icon: Icons.person_outline_rounded),
+            _ComingSoonPage(
+              title: 'Profile',
+              icon: Icons.person_outline_rounded,
+            ),
           ],
         ),
       ),

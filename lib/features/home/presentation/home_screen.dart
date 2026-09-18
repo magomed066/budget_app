@@ -1,6 +1,6 @@
-import 'package:budget_app/theme/app_colors.dart';
-import 'package:budget_app/widgets/home/balance.dart';
-import 'package:budget_app/widgets/home/header.dart';
+import 'package:budget_app/app/theme/app_colors.dart';
+import 'package:budget_app/features/home/presentation/widgets/balance.dart';
+import 'package:budget_app/features/home/presentation/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
