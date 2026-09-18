@@ -2,7 +2,9 @@ import 'package:budget_app/core/network/api_exception.dart';
 import 'package:budget_app/core/network/api_service_provider.dart';
 import 'package:budget_app/core/utils/logger.dart';
 import 'package:budget_app/features/auth/data/auth_repository.dart';
+import 'package:budget_app/features/auth/data/auth_storage.dart';
 import 'package:budget_app/features/auth/data/auth_user.dart';
+import 'package:budget_app/features/auth/providers/user_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,6 +48,10 @@ class LoginController extends Notifier<AsyncValue<AuthUser?>> {
       }
 
       final response = await repository.login(email, password);
+
+      await authStorage.saveUser(response.data);
+      ref.invalidate(currentUserProvider);
+
       return response.data;
     });
 
