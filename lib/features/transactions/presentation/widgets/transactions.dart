@@ -1,13 +1,9 @@
 import 'package:budget_app/app/theme/app_colors.dart';
-import 'package:budget_app/core/network/api_exception.dart';
+import 'package:budget_app/core/utils/async_error_handler.dart';
 import 'package:budget_app/core/utils/date_formatter.dart';
-import 'package:budget_app/core/utils/logger.dart';
-import 'package:budget_app/core/utils/number_formatter.dart';
-import 'package:budget_app/features/transactions/data/transaction.dart';
 import 'package:budget_app/features/transactions/presentation/transactions_screen.dart';
 import 'package:budget_app/features/transactions/presentation/widgets/transaction_card.dart';
 import 'package:budget_app/features/transactions/providers/transaction_provider.dart';
-import 'package:budget_app/shared/widgets/toaster.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,17 +19,10 @@ class TransactionsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(transactionControllerProvider, (previous, next) {
-      if (!next.hasError) return;
-      final error = next.error;
-      logger.e(
-        'Transactions failed to load',
-        error: error,
-        stackTrace: next.stackTrace,
-      );
-      Toaster.error(
-        error is ApiException
-            ? error.userMessage
-            : 'Could not load your transactions. Please try again.',
+      handleAsyncError(
+        next,
+        logMessage: 'Transactions failed to load',
+        fallbackMessage: 'Could not load your transactions. Please try again.',
       );
     });
 
@@ -75,11 +64,9 @@ class TransactionsWidget extends ConsumerWidget {
                 key: ValueKey(tx.id),
                 title: tx.account.name,
                 description: tx.note,
-                amount: tx.type == TransactionType.income
-                    ? '+ ${formatMinorAmount(tx.amountMinor)}'
-                    : '- ${formatMinorAmount(tx.amountMinor)}',
-                frequency: formatMonthDay(tx.createdAt.toLocal()),
-                icon: Icons.abc_rounded,
+                amountMinor: tx.amountMinor,
+                type: tx.type,
+                date: formatMonthDay(tx.createdAt.toLocal()),
               ),
           ],
         ),

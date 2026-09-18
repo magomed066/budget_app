@@ -41,7 +41,7 @@ class BalanceCardWidget extends ConsumerWidget {
     final name = account.value?.name ?? "";
     final createdAt = account.value?.createdAt;
     final date = createdAt == null ? '' : formatMonthDay(createdAt.toLocal());
-    final balance = formatMinorAmount(account.value?.openingBalanceMinor ?? 0);
+    final balance = formatAmount(account.value?.openingBalanceMinor ?? 0);
 
     return Container(
       width: double.infinity,

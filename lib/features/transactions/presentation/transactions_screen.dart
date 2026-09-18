@@ -1,13 +1,10 @@
 import 'package:budget_app/app/theme/app_colors.dart';
-import 'package:budget_app/core/network/api_exception.dart';
+import 'package:budget_app/core/utils/async_error_handler.dart';
 import 'package:budget_app/core/utils/date_formatter.dart';
-import 'package:budget_app/core/utils/logger.dart';
-import 'package:budget_app/core/utils/number_formatter.dart';
 import 'package:budget_app/features/transactions/data/transaction.dart';
 import 'package:budget_app/features/transactions/presentation/widgets/transaction_card.dart';
 import 'package:budget_app/features/transactions/providers/transaction_provider.dart';
 import 'package:budget_app/shared/widgets/app_bar.dart';
-import 'package:budget_app/shared/widgets/toaster.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -42,17 +39,10 @@ class TransactionsScreen extends ConsumerWidget {
     // );
 
     ref.listen(transactionControllerProvider, (previous, next) {
-      if (!next.hasError) return;
-      final error = next.error;
-      logger.e(
-        'Transactions failed to load',
-        error: error,
-        stackTrace: next.stackTrace,
-      );
-      Toaster.error(
-        error is ApiException
-            ? error.userMessage
-            : 'Could not load your transactions. Please try again.',
+      handleAsyncError(
+        next,
+        logMessage: 'Transactions failed to load',
+        fallbackMessage: 'Could not load your transactions. Please try again.',
       );
     });
 
@@ -88,7 +78,6 @@ class TransactionsScreen extends ConsumerWidget {
           ],
         ),
       ),
-      // bottomNavigationBar: ,
     );
   }
 }
@@ -100,27 +89,12 @@ class _TransactionListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isIncome = transaction.type == TransactionType.income;
-
     return TransactionTile(
       title: transaction.category.name,
-      description: transaction.note.isEmpty
-          ? transaction.account.name
-          : transaction.note,
-      amount:
-          '${isIncome ? '+' : '-'} ${formatMinorAmount(transaction.amountMinor)}',
-      frequency: formatMonthDay(transaction.date.toLocal()),
-      icon: isIncome ? Icons.south_west_rounded : Icons.north_east_rounded,
-      backgroundColor: isIncome
-          ? const Color(0xFFDDF5EC)
-          : const Color(0xFFF5C842),
-      iconBackgroundColor: isIncome
-          ? const Color(0xFFB9EBD8)
-          : const Color(0xFFFFE9A8),
-      iconColor: isIncome ? const Color(0xFF148563) : AppColors.primaryText,
-      subtitleColor: isIncome
-          ? const Color(0xFF276B57)
-          : const Color(0xFF5C4A1E),
+      description: transaction.note.isEmpty ? "" : transaction.note,
+      amountMinor: transaction.amountMinor,
+      type: transaction.type,
+      date: formatMonthDay(transaction.date.toLocal()),
     );
   }
 }
