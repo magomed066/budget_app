@@ -1,4 +1,5 @@
 import 'package:budget_app/features/home/presentation/home_screen.dart';
+import 'package:budget_app/features/subscriptions/presentation/subscriptions_screen.dart';
 import 'package:budget_app/app/theme/app_colors.dart';
 import 'package:budget_app/app/widgets/app_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class _AppShellState extends State<AppShell> {
               title: 'Budget',
               icon: Icons.pie_chart_outline_rounded,
             ),
+            SubscriptionsScreen(),
             _ComingSoonPage(title: 'Savings', icon: Icons.savings_outlined),
             _ComingSoonPage(
               title: 'Profile',

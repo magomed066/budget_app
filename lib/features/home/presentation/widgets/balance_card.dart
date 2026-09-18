@@ -10,10 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class BalanceCardWidget extends ConsumerWidget {
-  const BalanceCardWidget({super.key, this.date = '03/18'});
-
-  // final String balance;
-  final String date;
+  const BalanceCardWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

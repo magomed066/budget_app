@@ -14,6 +14,7 @@ class AppNavigationBar extends StatelessWidget {
   static const _destinations = [
     (icon: Icons.home_outlined, label: 'Home'),
     (icon: Icons.shopping_bag_outlined, label: 'Budget'),
+    (icon: Icons.autorenew_rounded, label: 'Subscriptions'),
     (icon: Icons.show_chart_rounded, label: 'Savings'),
     (icon: Icons.settings_outlined, label: 'Profile'),
   ];
