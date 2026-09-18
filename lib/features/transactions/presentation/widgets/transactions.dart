@@ -4,6 +4,7 @@ import 'package:budget_app/core/utils/date_formatter.dart';
 import 'package:budget_app/core/utils/logger.dart';
 import 'package:budget_app/core/utils/number_formatter.dart';
 import 'package:budget_app/features/transactions/data/transaction.dart';
+import 'package:budget_app/features/transactions/presentation/transactions_screen.dart';
 import 'package:budget_app/features/transactions/presentation/widgets/transaction_card.dart';
 import 'package:budget_app/features/transactions/providers/transaction_provider.dart';
 import 'package:budget_app/shared/widgets/toaster.dart';
@@ -18,40 +19,6 @@ class TransactionsWidget extends ConsumerWidget {
     fontSize: 18,
     fontWeight: FontWeight.w600,
   );
-
-  void _showAllTransactions(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: AppColors.background,
-      showDragHandle: true,
-      isScrollControlled: true,
-      builder: (context) => SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text('All transactions', style: _headingStyle),
-                  ),
-                  IconButton(
-                    tooltip: 'Close',
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              const _EmptyTransactions(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -81,7 +48,9 @@ class TransactionsWidget extends ConsumerWidget {
             const Expanded(child: Text('Transactions', style: _headingStyle)),
             const SizedBox(width: 12),
             OutlinedButton(
-              onPressed: () => _showAllTransactions(context),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => TransactionsScreen()),
+              ),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primaryText,
                 side: const BorderSide(color: AppColors.dark),
@@ -115,31 +84,6 @@ class TransactionsWidget extends ConsumerWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-class _EmptyTransactions extends StatelessWidget {
-  const _EmptyTransactions();
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'No transactions yet',
-            style: TextStyle(color: AppColors.primaryText, fontSize: 14),
-          ),
-          SizedBox(height: 4),
-          Text(
-            'Your recent transactions will appear here.',
-            style: TextStyle(color: AppColors.secondaryText, fontSize: 13),
-          ),
-        ],
-      ),
     );
   }
 }
