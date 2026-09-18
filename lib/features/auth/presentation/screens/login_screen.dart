@@ -1,7 +1,8 @@
+import 'package:budget_app/app/app_routes.dart';
 import 'package:budget_app/app/theme/auth_colors.dart';
 import 'package:budget_app/core/network/api_exception.dart';
-import 'package:budget_app/features/auth/presentation/login_controller.dart';
 import 'package:budget_app/features/auth/presentation/widgets/login_form.dart';
+import 'package:budget_app/features/auth/providers/login_provider.dart';
 import 'package:budget_app/shared/widgets/app_bar.dart';
 import 'package:budget_app/shared/widgets/toaster.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +20,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final passwordController = TextEditingController();
 
   void onSubmit() {
-    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+    final email = emailController.text.trim();
+    if (email.isEmpty || passwordController.text.isEmpty) {
       Toaster.warning("Input email and password");
       return;
     }
 
     ref
         .read(loginControllerProvider.notifier)
-        .login(emailController.text.trim(), passwordController.text);
+        .login(email, passwordController.text);
   }
 
   @override
@@ -39,14 +41,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final loginState = ref.watch(loginControllerProvider);
+
     ref.listen(loginControllerProvider, (previous, next) {
-      if (next.hasError && !next.isLoading) {
+      if (next.hasError) {
         final error = next.error;
         Toaster.error(
           error is ApiException
               ? error.userMessage
-              : 'Unable to sign in. Please try again.',
+              : 'Login failed. Please try again.',
         );
+        return;
+      }
+
+      if (!next.isLoading && next.value != null) {
+        Navigator.of(context)
+            .pushAndRemoveUntil(AppRoutes.home(), (route) => false);
       }
     });
 

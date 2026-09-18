@@ -1,5 +1,5 @@
 import 'package:budget_app/app/theme/app_theme.dart';
-import 'package:budget_app/features/auth/presentation/welcome_page.dart';
+import 'package:budget_app/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:budget_app/shared/widgets/toaster.dart';
 import 'package:flutter/material.dart';
 

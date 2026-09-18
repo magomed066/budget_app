@@ -4,11 +4,13 @@ import 'dart:convert';
 import 'package:budget_app/core/network/api_exception.dart';
 import 'package:budget_app/core/network/api_service.dart';
 import 'package:budget_app/core/network/api_service_provider.dart';
-import 'package:budget_app/features/auth/presentation/login_controller.dart';
+import 'package:budget_app/features/auth/providers/login_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+
+import 'helpers/fake_connectivity.dart';
 
 http.Response loginResponse() => http.Response(
   jsonEncode({
@@ -35,6 +37,7 @@ ProviderContainer containerWith(
   addTearDown(client.close);
   return ProviderContainer.test(
     overrides: [
+      connectivityProvider.overrideWithValue(FakeConnectivity()),
       apiServiceProvider.overrideWithValue(
         ApiService(baseUrl: 'http://localhost:3000', client: client),
       ),

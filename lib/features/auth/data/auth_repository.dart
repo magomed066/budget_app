@@ -18,4 +18,6 @@ class AuthRepository {
       (data) => AuthUser.fromJson(data as Map<String, dynamic>),
     );
   }
+
+  Future<void> logout() async {}
 }

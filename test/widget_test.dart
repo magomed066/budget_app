@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:budget_app/app/app_shell.dart';
 import 'package:budget_app/core/network/api_service.dart';
 import 'package:budget_app/core/network/api_service_provider.dart';
-import 'package:budget_app/features/auth/presentation/login_page.dart';
-import 'package:budget_app/features/auth/presentation/welcome_page.dart';
+import 'package:budget_app/features/auth/presentation/screens/login_screen.dart';
+import 'package:budget_app/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:budget_app/shared/widgets/button_indicator.dart';
 import 'package:budget_app/shared/widgets/toaster.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +13,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+
+import 'helpers/fake_connectivity.dart';
 
 void main() {
   tearDown(Toaster.dismiss);
@@ -50,6 +52,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          connectivityProvider.overrideWithValue(FakeConnectivity()),
           apiServiceProvider.overrideWithValue(
             ApiService(baseUrl: 'http://localhost:3000', client: client),
           ),
@@ -76,6 +79,62 @@ void main() {
     expect(find.text('Invalid email or password'), findsOneWidget);
     await tester.pump(const Duration(seconds: 4));
     expect(find.byType(LoginPage), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('successful login opens home and clears the auth routes', (
+    tester,
+  ) async {
+    final navigatorKey = GlobalKey<NavigatorState>();
+    final client = MockClient(
+      (_) async => http.Response(
+        jsonEncode({
+          'success': true,
+          'data': {
+            'id': 1,
+            'email': 'user@example.com',
+            'firstName': 'Test',
+            'lastName': 'User',
+            'phone': null,
+            'createdAt': '2026-01-01T00:00:00Z',
+            'updatedAt': '2026-01-01T00:00:00Z',
+            'accessToken': 'access',
+            'refreshToken': 'refresh',
+          },
+        }),
+        200,
+      ),
+    );
+    addTearDown(client.close);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          connectivityProvider.overrideWithValue(FakeConnectivity()),
+          apiServiceProvider.overrideWithValue(
+            ApiService(baseUrl: 'http://localhost:3000', client: client),
+          ),
+        ],
+        child: MaterialApp(
+          navigatorKey: navigatorKey,
+          builder: Toaster.builder,
+          home: const WelcomePage(),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Get started'));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    await tester.enterText(find.byType(TextField).first, 'user@example.com');
+    await tester.enterText(find.byType(TextField).last, 'password');
+    await tester.tap(find.text('Sign In'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AppShell), findsOneWidget);
+    expect(find.text(r'$500'), findsOneWidget);
+    expect(find.byType(LoginPage), findsNothing);
+    expect(find.byType(WelcomePage), findsNothing);
+    expect(navigatorKey.currentState!.canPop(), isFalse);
+    expect(await navigatorKey.currentState!.maybePop(), isFalse);
     expect(tester.takeException(), isNull);
   });
 

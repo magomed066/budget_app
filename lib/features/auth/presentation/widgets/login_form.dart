@@ -53,7 +53,7 @@ class LoginForm extends StatelessWidget {
             SizedBox(
               height: 50,
               child: FilledButton(
-                onPressed: isLoading ? () {} : onSignIn,
+                onPressed: isLoading ? null : onSignIn,
                 style: FilledButton.styleFrom(
                   backgroundColor: AuthColors.backgroundBlack,
                   disabledBackgroundColor: AuthColors.border,
